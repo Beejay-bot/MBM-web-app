@@ -54,7 +54,6 @@ INSTALLED_APPS = [
     'django_countries',
     'core',
     'info',
-    'pypaystack'
 ]
 
 MIDDLEWARE = [

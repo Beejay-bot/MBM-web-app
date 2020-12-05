@@ -9,7 +9,7 @@ from django.views.generic import ListView, DetailView, View
 from django.core.exceptions import ObjectDoesNotExist
 from .forms import CheckoutForm, CouponForm, Refundform
 
-from pypaystack import Transaction, Customer, Plan, errors
+# from pypaystack import Transaction, Customer, Plan, errors
 
 import random
 import string
@@ -223,57 +223,57 @@ class PaymentView(LoginRequiredMixin, View):
     def post(self, *args, **kwargs):
         order = Order.objects.get(user=self.request.user, ordered=False)
         amount = int(order.get_total() * 100)
-        try:
-            transaction = Transaction(authorization_key=paystackKey)
-            response = transaction.charge(self.request.user.email,
-                                          "CustomerAUTHcode",
-                                          amount)
-            order.ordered = True
-            # Create Payment
-            payment = Payment()
-            payment.paystack_charge_id = response['id']
-            payment.user = self.request.user
-            payment.amount = order.get_total()
-            payment.save()
+        # try:
+        #     transaction = Transaction(authorization_key=paystackKey)
+        #     response = transaction.charge(self.request.user.email,
+        #                                   "CustomerAUTHcode",
+        #                                   amount)
+        #     order.ordered = True
+        #     # Create Payment
+        #     # payment = Payment()
+        #     # payment.paystack_charge_id = response['id']
+        #     # payment.user = self.request.user
+        #     # payment.amount = order.get_total()
+        #     # payment.save()
 
-            # assign the payment to the order
+        #     # assign the payment to the order
 
-            order_items = order.items.all()
-            order_items.update(ordered=True)
-            for item in order_items:
-                item.save()
+        #     order_items = order.items.all()
+        #     order_items.update(ordered=True)
+        #     for item in order_items:
+        #         item.save()
 
-            order.ordered = True
-            order.payment = payment
-            # TODO : assign ref code
-            order.ref_code = create_ref_code
-            order.save()
+        #     order.ordered = True
+        #     order.payment = payment
+        #     # TODO : assign ref code
+        #     order.ref_code = create_ref_code
+        #     order.save()
 
-            messages.success(self.request, 'Your was Successful!!')
-            return redirect('/')
+        #     messages.success(self.request, 'Your was Successful!!')
+        #     return redirect('/')
 
-        except errors.PyPaystackError as e:
-            body = e.json_body
-            err = body.get('error', {})
-            messages.warning(self.request, f"{err.get('message')}")
-            return redirect('/')
+        # except errors.PyPaystackError as e:
+        #     body = e.json_body
+        #     err = body.get('error', {})
+        #     messages.warning(self.request, f"{err.get('message')}")
+        #     return redirect('/')
 
-        except errors.MissingAuthKeyError as e:
-            messages.warning(self.request, 'Missing Authentication Key')
-            return redirect('/')
+        # except errors.MissingAuthKeyError as e:
+        #     messages.warning(self.request, 'Missing Authentication Key')
+        #     return redirect('/')
 
-        except errors.InvalidMethodError as e:
-            messages.warning(self.request, 'Invalid parameters')
-            return redirect('/')
+        # except errors.InvalidMethodError as e:
+        #     messages.warning(self.request, 'Invalid parameters')
+        #     return redirect('/')
 
-        except errors.InvalidDataError as e:
-            messages.warning(self.request, 'Invalid Data given')
-            return redirect('/')
+        # except errors.InvalidDataError as e:
+        #     messages.warning(self.request, 'Invalid Data given')
+        #     return redirect('/')
 
-        except Exception as e:
-            # Send email to myself
-            messages.warning(self.request, 'Error, We have been notified')
-            return redirect('/')
+        # except Exception as e:
+        #     # Send email to myself
+        #     messages.warning(self.request, 'Error, We have been notified')
+        #     return redirect('/')
 
 
 class HomeView(ListView):
