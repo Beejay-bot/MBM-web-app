@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+  <title>
+    {% block title %}
+      Payment
+    {% endblock title %}
+  </title>
+
+<body class="grey lighten-3">
+{% block content %}
+  <!--Main layout-->
+  <main >
+    <div class="container wow fadeIn">
+
+      <!-- Heading -->
+      <h2 class="my-5 h2 text-center">Payment</h2>
+
+      <!--Grid row-->
+      <div class="row">
+
+        <!--Grid column-->
+        <div class="col-md-12 mb-4">
+        
+          <!--Card-->
+          <div class="card">
+            {% comment %}           
+            <form method='POST' class= 'card-body'>
+              {% csrf_token %}
+              {{ form|crispy }}
+              <a class="btn btn-primary" type='submit'>Submit</a>
+            </form> {% endcomment %}
+          
+          <form action="." method='post'>
+            {% csrf_token %}
+            <script src="https://js.paystack.co/v1/inline.js"></script>
+            <button type="button" onclick="makePayment()"> Pay </button> 
+          </form>
+
+          </div>
+
+          <!--/.Card-->
+
+        </div>
+        <!--Grid column-->
+
+        {% include 'order_snippet.html' %}
+       
+      </div>
+      <!--Grid row-->
+
+    </div>
+  </main>
+  <!--Main layout-->
+
+
+{% endblock content %}
+
+{% block script %}
+  
+<script>
+  function makePayment(){
+    var handler = PaystackPop.setup({
+            key = 'pk_test_081185ac33448e6f1214028ee4127bef5c606b60' //public key from your paystack
+            email: {{email}},
+            amount: “amount to be paid”,
+            currency: “NGN”,
+            ref: “”+Math.floor((Math.random() * 100000000) + 1),
+            ref: ''+Math.floor((Math.random() * 1000000000) + 1),
+            callback: function(response){
+          alert('success. transaction ref is ' +response.reference);
+      },
+      onClose: function(){
+          alert('window closed');
+      }
+    });
+    handler.openIframe();
+  }
+  window.onload = makePayment()
+</script>
+
+{% endblock script %}
+
+</body>
+
+
+</html>
+ 
+        
+
+        

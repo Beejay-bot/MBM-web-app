@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+About Us.
+{% endblock title %}
+
+{% block content %}
+
+
+{% for post in content  %}
+<div class="row">
+    <div class='col-md-3 mt-5 font-weight-bold' >
+        <div style='height:100px; margin-top:100px;' class='wow fadeIn page-footer text-center'> 
+            <p class='mb-3 mt-5' style="color:black;">
+                <a class="waves-effect" href="{% url 'info:about-us' %}">About Us</a></li>
+            </p>
+            <p class="">     
+                <a class="nav-link waves-effect" href="{% url 'info:contact-us' %}">
+                Contact us  </a>
+            </p>
+        </div>
+    </div>
+    <div class="col-md-8">
+        <div class='container mt-5'>
+            <h5 class="text-center  text-primary mx-5 wow fadeIn" style="font-family:avenir It std">
+                Who is Mug, Bottle & More ?
+            </h5>
+            <p class="dark-grey-text">{{ post.who_are_we }}</p>
+        </div>
+        <hr>
+        <div class='container'>
+            <h5 class="text-center  text-primary mx-5 wow fadeIn" style="font-family:avenir It std">
+                What We do?   
+            </h5>
+            <p class="dark-grey-text">{{ post.what_we_do }}</p>
+        </div>
+        <hr>
+        <div class='container mb-5'>
+            <h5 class="text-center  text-primary mx-5 wow fadeIn" style="font-family:avenir It std">
+                Why us?  
+            </h5>
+            <p class="dark-grey-text">{{ post.why_us }}</p>
+        </div>
+    </div>    
+</div>
+{% endfor %}
+{% endblock content %}
